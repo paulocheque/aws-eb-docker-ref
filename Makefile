@@ -53,7 +53,7 @@ eb_init:
 
 eb_create:
 	@clear
-	time env/bin/eb create ${ELB_ENV} --cname ${ELB_ENV} --instance_type '${ELB_MACHINE}' --scale 1 --timeout 5 --single
+	time env/bin/eb create ${ELB_ENV} --cname ${ELB_ENV} --instance_type '${ELB_MACHINE}' --single --timeout 5
 
 eb_open:
 	@env/bin/eb open ${ELB_ENV}
