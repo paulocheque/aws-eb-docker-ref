@@ -15,7 +15,7 @@ clean:
 	@find . -name "*.pyc" -delete
 
 prepare:
-	@clear ; python3.6 -m venv env
+	@virtualenv env -p python2.7
 
 deps:
 	@env/bin/pip install -r requirements-dev.txt
@@ -36,9 +36,11 @@ docker_build:
 docker_run:
 	@clear
 	# PORT_HOST:PORT_CONTAINER
-	# Host 7999 => Docker Gunicorn 8000
+	# Host 7999 => Docker Nginx 8000
+	# Host 8000 => Docker Gunicorn 8001
+	# Docker Nginx 8000 => Docker Gunicorn 8001
 	@open "http://localhost:7999" # Gunicorn
-	docker run -i -p 7999:8000 ${DOCKER_REF}
+	docker run -i -p 7999:8000 -p 8000:8001 ${DOCKER_REF}
 	docker ps -l
 
 

@@ -1,5 +1,5 @@
 # https://hub.docker.com/_/python/
-FROM python:3.6-alpine3.6
+FROM python:2.7-alpine3.6
 
 # Copy all except files defined in the `.dockerignore`
 COPY . /app
@@ -7,14 +7,18 @@ WORKDIR /app
 RUN mkdir -p logs
 
 RUN apk --update add --virtual build-dependencies gcc musl-dev linux-headers \
+    && apk --update add nginx \
     # Python packages
-    && python3.6 -m venv env \
+    && pip --no-cache-dir install virtualenv \
+    && virtualenv env -p python2.7 \
     && env/bin/pip --no-cache-dir install --upgrade pip \
     && env/bin/pip --no-cache-dir install --upgrade wheel \
     # Environment Information
     && env/bin/python --version \
     && env/bin/pip --version \
     && env/bin/wheel version \
+    && nginx -v \
+    && which nginx \
     && env \
     # Build
     && env/bin/pip --no-cache-dir install -r requirements.txt \
@@ -23,6 +27,10 @@ RUN apk --update add --virtual build-dependencies gcc musl-dev linux-headers \
     && rm -rf /tmp/* \
     && ls -la /app
 
+# Testing the nginx.conf file
+RUN nginx -t -p . -c nginx.conf
+
+# Nginx
 EXPOSE 8000
 
-CMD [ "env/bin/gunicorn", "app:myapp", "-b", "0.0.0.0:8000", "--worker-class=meinheld.gmeinheld.MeinheldWorker", "-t", "90", "-w", "3", "--log-level", "info", "--log-file", "/app/logs/gunicorn.log", "--error-logfile", "/app/logs/gunicorn-error.log", "--access-logfile", "/app/logs/gunicorn-access.log" ]
+CMD [ "env/bin/supervisord", "-c", "supervisord.conf"]

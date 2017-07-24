@@ -1,8 +1,8 @@
 # AWS + Elastic Beanstalk + Docker + Python
 
-Just a sample app. Check the commits reference.
+Just a sample app. Check the commits for reference.
 
-## Prepare the Local environment
+## Prepare your Local environment
 
     make prepare
     make deps
@@ -10,11 +10,13 @@ Just a sample app. Check the commits reference.
 
 ## Check your Docker container locally
 
+Build a image and run a container.
+
     make docker_build
     make docker_run
 
 
-## Prepare de EB environment
+## Prepare your AWS-EB environment
 
 #### 1. Configure your AWS keys. 
 
@@ -30,7 +32,9 @@ Check the `.env` file for reference.
 
     make eb_status
     make eb_logs
+
     make eb_ssh
+    # Then, `cd /var/app/current/` or `cd /var/log/eb-docker/containers/eb-current-app/`
 
 #### 4. Deploy updates
 
