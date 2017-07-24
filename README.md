@@ -7,6 +7,13 @@ Just a sample app. Check the commits reference.
     make prepare
     make deps
 
+
+## Check your Docker container locally
+
+    make docker_build
+    make docker_run
+
+
 ## Prepare de EB environment
 
 #### 1. Configure your AWS keys. 
@@ -24,3 +31,7 @@ Check the `.env` file for reference.
     make eb_status
     make eb_logs
     make eb_ssh
+
+#### 4. Deploy updates
+
+    make eb_deploy

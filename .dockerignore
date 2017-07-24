@@ -12,3 +12,8 @@ env/
 *.tar
 *.tar.gz
 *.sqlite3
+Makefile
+requirements-dev.txt
+__pycache__
+*.pyc
+*.pyo

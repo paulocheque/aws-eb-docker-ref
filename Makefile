@@ -1,3 +1,7 @@
+DOCKER_REF=paulocheque/aws-eb-docker-ref:v1
+DOCKER_CONTAINER_NAME=pc-docker-ref
+DOCKER_CONTAINER_ID=`docker ps -n 1 -q`
+
 ELB_ENV=aws-eb-docker-sample
 ELB_MACHINE=t2.micro
 
@@ -14,12 +18,31 @@ prepare:
 	@clear ; python3.6 -m venv env
 
 deps:
+	@env/bin/pip install -r requirements-dev.txt
 	@env/bin/pip install -r requirements.txt
 
 shell:
 	@env/bin/python
 
-# EB
+
+# Docker
+
+docker_build:
+	# Create a Docker image using the Dockerfile
+	@clear
+	docker build -f Dockerfile --tag ${DOCKER_REF} .
+	docker images
+
+docker_run:
+	@clear
+	# PORT_HOST:PORT_CONTAINER
+	# Host 7999 => Docker Gunicorn 8000
+	@open "http://localhost:7999" # Gunicorn
+	docker run -i -p 7999:8000 ${DOCKER_REF}
+	docker ps -l
+
+
+# Elastic Beanstalk
 
 eb_init:
 	@clear
@@ -44,4 +67,7 @@ eb_ssh:
 eb_logs:
 	@clear
 	env/bin/eb events ${ELB_ENV}
-	env/bin/eb logs ${ELB_ENV}
+	env/bin/eb logs ${ELB_ENV} --no-verify-ssl
+
+eb_deploy:
+	env/bin/eb deploy ${ELB_ENV} --timeout 5
