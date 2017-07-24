@@ -1,0 +1,14 @@
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore
+.DS_Store
+env/
+*.log
+*.pid
+*.dump
+*.csv
+*.zip
+*.tar
+*.tar.gz
+*.sqlite3
